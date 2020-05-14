@@ -2,26 +2,36 @@
 	import Rain from './components/RainVisualisation.svelte';
 	import Sun from './components/SunVisualisation.svelte';
 	import Wind from './components/WindVisualisation.svelte';
-	export let name;
+	import { getFormattedDateString } from './utils';
 
 	const fetchData = (async () => {
-		const response = await fetch('data.json')
-		return await response.json()
+		const response = await fetch('data.json');
+		return await response.json();
 	})();
+
+	let dateString = '';
+	const handleDayEnter = day => dateString = getFormattedDateString(new Date(day));
+	const handleDayLeave = () => dateString = '';
 </script>
 
 <main>
-	<h1>Dublin Rain in 2019</h1>
+	<aside>{dateString}</aside>
 
 	<article>
 		{#await fetchData}
 			<!-- fetching -->
 		{:then data}
-			<Rain data={data} />
+			<Rain
+				data={data}
+				onDayEnter={handleDayEnter}
+				onDayLeave={handleDayLeave}
+			/>
 		{:catch error}
 			{error}
 		{/await}
 	</article>
+
+	<h1>Dublin Rain in 2019</h1>
 </main>
 
 <style>
@@ -31,12 +41,18 @@
 		height: 100%;
 	}
 
-	h1 {
+	h1, aside {
 		position: absolute;
-		bottom: 36px;
 		width: 100%;
-		margin: 0;
 		text-align: center;
+	}
+
+	aside {
+		top: 48px;
+	}
+
+	h1 {
+		bottom: 36px;
 	}
 
 	article {

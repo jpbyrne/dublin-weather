@@ -1,5 +1,7 @@
 <script>
   export let data = [];
+  export let onDayEnter = () => {};
+  export let onDayLeave = () => {};
 
   const columns = 19;
   const diameter = 1 / columns;
@@ -13,7 +15,9 @@
   rain = rain.map((drop, index) => ({
     x: index * diameter % 1 + radius,
     y: Math.floor(index / columns) * diameter + radius,
-    size: ((drop - min) / (max - min)) * (radius - (strokeWidth * 2)) * scale ,
+    size: ((drop - min) / (max - min)) * (radius - (strokeWidth * 2)) * scale,
+    handleEnter: () => onDayEnter(data[index].date),
+    handleLeave: () => onDayLeave(data[index].date),
   }));
 </script>
 
@@ -25,6 +29,8 @@
       r={drop.size}
       stroke-width={strokeWidth}
       style="transform-origin: {drop.x * 100 + '%'} {drop.y * 100 + '%'}"
+      on:mouseenter={drop.handleEnter}
+	    on:mouseleave={drop.handleLeave}
     />
   {/each}
 </svg>
