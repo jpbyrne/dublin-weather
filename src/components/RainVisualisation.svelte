@@ -1,10 +1,11 @@
 <script>
   export let data = [];
 
-  const columns = 20;
+  const columns = 19;
   const diameter = 1 / columns;
   const radius = diameter / 2;
   const strokeWidth = 0.001;
+  const scale = 4;
 
   let rain = data.map(datum => datum.rain);
   const min = Math.min(...rain);
@@ -12,7 +13,7 @@
   rain = rain.map((drop, index) => ({
     x: index * diameter % 1 + radius,
     y: Math.floor(index / columns) * diameter + radius,
-    size: ((drop - min) / (max - min)) * (radius - (strokeWidth * 2)),
+    size: ((drop - min) / (max - min)) * (radius - (strokeWidth * 2)) * scale ,
   }));
 </script>
 
