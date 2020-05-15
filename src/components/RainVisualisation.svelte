@@ -6,7 +6,7 @@
   const columns = 19;
   const diameter = 1 / columns;
   const radius = diameter / 2;
-  const strokeWidth = 0.001;
+  const strokeWidth = 0.004;
   const scale = 4;
 
   let rain = data.map(datum => datum.rain);
@@ -16,8 +16,8 @@
     x: index * diameter % 1 + radius,
     y: Math.floor(index / columns) * diameter + radius,
     size: ((drop - min) / (max - min)) * (radius - (strokeWidth * 2)) * scale,
-    handleEnter: () => onDayEnter(data[index].date),
-    handleLeave: () => onDayLeave(data[index].date),
+    handleEnter: () => onDayEnter(data[index]),
+    handleLeave: () => onDayLeave(data[index]),
   }));
 </script>
 
@@ -39,12 +39,26 @@
   svg {
     width: 100%;
     height: 100%;
+    animation: appear 2s linear;
+    border-radius: 24px;
+		box-shadow: 0px 0px 24px var(--shadow-color);
   }
 
   circle {
     fill: transparent;
     stroke: #4FACFE;
     animation: scale-up 2s ease-in-out;
+  }
+
+  @keyframes appear {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   @keyframes scale-up {
